@@ -1,29 +1,25 @@
 package RecipesOp
 
-case class Recipe(val title: String, val ingredients: Seq[Ingredient],
-                  val instruction: String, val servings: Int = 1)
 
-case class Ingredient(name: String, quantity: Double, measure: String="")
-
-
+import models._
 
 object Recipes {
 
-  def findByIngredient(recipes: Seq[Recipe], targetIngredient: String): Seq[Recipe] =
+  def findByIngredient(recipes: Seq[Recipe[Int]], targetIngredient: String): Seq[Recipe[Int]] =
     recipes filter {r =>  ( hasIngredient(r.ingredients, targetIngredient))}
 
   def hasIngredient(ingredients: Seq[Ingredient], targetIngredient: String): Boolean =
   // !(ingredients filter ( t => t.name == targetIngredient)).isEmpty   //avoid inverted logic
     ingredients exists {_.name.toLowerCase() == targetIngredient.toLowerCase()}
 
-  def findByTitle(recipes: Seq[Recipe], text: String):Seq[Recipe] =
+  def findByTitle(recipes: Seq[Recipe[Int]], text: String):Seq[Recipe[Int]] =
     recipes filter (r => r.title.contains(text))
 
   def formatIngredient(i: Ingredient): String = {
     s"${i.quantity} ${i.measure} ${i.name.capitalize}"
   }
 
-  def formatRecipe(r: Recipe): String = {
+  def formatRecipe(r: Recipe[Int]): String = {
 
     val sep = "-"*40
 
@@ -64,7 +60,7 @@ object Recipes {
   }
   */
 
-  def multiplyRecipe(recipe: Recipe, multiplier: Double): Recipe = {
+  def multiplyRecipe(recipe: Recipe[Int], multiplier: Double): Recipe[Int] = {
     var converted = recipe.ingredients map {i => i.copy(quantity = (i.quantity * multiplier))}
     recipe.copy(ingredients = converted, servings = (recipe.servings* multiplier.toInt))
   }
