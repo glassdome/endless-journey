@@ -1,7 +1,8 @@
 object Main extends App {
 
-  import RecipesOp._
-
+  import models._
+  import RecipesOp.Recipes
+  
   val i1 =  Ingredient("Peppers",2)
   val i2 =  Ingredient("Mushrooms", 1, "cup")
   val i3 =  Ingredient("Chicken", 1, "cup")
@@ -18,8 +19,8 @@ object Main extends App {
 
   val rec1 = Recipe("rec1", ing1, "instructions1", 1)
   val rec2 = Recipe("rec2", ing2, "instructions2", 1)
-  val rec3 = Recipe("rec3", ing3, "instruction3")
-  val rec4 = Recipe("rec4", ing2, "instruction4")
+  val rec3 = Recipe("rec3", ing3, "instruction3", 1)
+  val rec4 = Recipe("rec4", ing2, "instruction4", 1)
 
   val myRecipes =  Seq( rec1, rec2, rec3, rec4)
 
