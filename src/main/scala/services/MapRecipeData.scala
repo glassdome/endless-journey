@@ -9,6 +9,7 @@ import scala.util.{Try, Success, Failure}
 /**
  * A Recipe Database backed by a simple HashMap object.
  * 
+ * As you can see - this class implements the interface defined by `trait RecipeData`.
  * Note this class is suitable only for testing as all data is stored in-memory only.
  * Also note this class loads 3 example recipies on initialization.
  */
