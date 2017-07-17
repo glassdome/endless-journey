@@ -34,7 +34,9 @@ class RecipeService[A](db: RecipeData[A]) {
   def titleExists(title: String): Boolean = {
     db.list exists { r => normal(r.title) == normal(title) } 
   }
-  
+
+
+
   private[services] def normal(s: String) = s.trim.toLowerCase
   
   private[services] def validMultiplier(in: Double): Boolean = {

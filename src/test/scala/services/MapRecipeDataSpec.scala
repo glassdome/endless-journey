@@ -6,6 +6,8 @@ import org.specs2.mutable._
 import org.specs2.specification._
 import org.specs2.specification.Scope
 
+import scala.None
+
 
 class MapRecipeDataSpec extends Specification {
   
@@ -55,25 +57,36 @@ class MapRecipeDataSpec extends Specification {
   }
 
 
+
   "findById" should {
     
     "return the corresponding Recipe given an ID that exists in the database" >> {
-      pending
+    //ensure we have a recipe with ID = 1
+     MapRecipeData.findById(1)  must_=== Some(MapRecipeData.rs(1))
+
     }
     
     "return None when given an ID that does not exist in the database" >> {
-      pending
-    }
+      //ensure we don't have an item with ID = 6
+      MapRecipeData.findById(100)  must_=== None
+
+     }
   }  
   
   "delete" should {
     
     "remove and return the corresponding Recipe from the database given a valid ID" >> {
+
+     // val dummyRecipe = Recipe(66, "foo", Seq(Ingredient("bar", 0, "cups")), "do-nothing", 0)
+      //MapRecipeData.create(dummyRecipe)
+      //delete a recipe, ensure it returns Success(_)
+     // MapRecipeData.delete(66) must beSuccessfulTry
       pending
     }
     
     "throw an exception when given an ID that does not exist in the database" >> {
-      pending
+      // Ensure we can't delete non existing recipe (should throw an IllegalArgumentException)
+      MapRecipeData.delete(100) must beFailedTry.withThrowable[IllegalArgumentException]
     }
   }
   
