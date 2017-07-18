@@ -67,7 +67,7 @@ class MapRecipeDataSpec extends Specification {
     }
     
     "return None when given an ID that does not exist in the database" >> {
-      //ensure we don't have an item with ID = 6
+      //ensure we don't have an item with ID = 100 which doesn't exist
       MapRecipeData.findById(100)  must_=== None
 
      }
@@ -77,41 +77,63 @@ class MapRecipeDataSpec extends Specification {
     
     "remove and return the corresponding Recipe from the database given a valid ID" >> {
 
-      val dummyRecipe = Recipe(66, "foo", Seq(Ingredient("bar", 0, "cups")), "do-nothing", 0)
+      val dummyRecipe = Recipe(66, "new foo", Seq(Ingredient("bar", 0, "cups")), "do-nothing", 0)
       MapRecipeData.create(dummyRecipe) must beSuccessfulTry
       MapRecipeData.delete(66) must beSuccessfulTry
     }
     
     "throw an exception when given an ID that does not exist in the database" >> {
       // Ensure we can't delete non existing recipe (should throw an IllegalArgumentException)
-      MapRecipeData.delete(100) must beFailedTry.withThrowable[IllegalArgumentException]    
+      MapRecipeData.delete(1000) must beFailedTry.withThrowable[IllegalArgumentException]
     }
   }
   
   "update" should {
     
     "replace the corresponding Recipe with the new representation given a valid ID" >> {
-      pending
+
+      val dummyRecipe = MapRecipeData.findById(1).get
+      val oldIngCount = dummyRecipe.ingredients.size
+      val newIngredients = dummyRecipe.ingredients :+ Ingredient("blah", 23, "tsp")
+      val updatedRec = dummyRecipe.copy(ingredients = newIngredients)
+
+      updatedRec.ingredients.size === oldIngCount + 1
+
+      val result = MapRecipeData.update(updatedRec)
+      result must beSuccessfulTry
+      result.get.ingredients.size === oldIngCount + 1
+
     }
     
     "throw an exception when given and ID that does not exist in the database" >> {
-      pending
+      val dummyRecipe = Recipe(1000, "bad foo", Seq(Ingredient("bar", 0, "cups")), "do-nothing", 0)
+      MapRecipeData.update(dummyRecipe) must beFailedTry.withThrowable[IllegalArgumentException]
     }
   }
   
   "list" should {
     
     "return a list of all Recipes in the database" >> {
+      //ensures we have a seq of all the items in MapRecipeData
+      val keys = for ((k,v) <- MapRecipeData.rs) yield k
+        println(keys)
+
+      val list = MapRecipeData.list()
+      val ids = for ( i <- list) yield i.id
+      println(ids)
+      println("="*20)
+
       pending
     }
     
     "return an empty list when the database is empty" >> {
-      pending
-    }
-    
-  }
-  
+      //ensures we have an empty list if all items are deleted
+      for ((k,v) <- MapRecipeData.rs)  MapRecipeData.delete(k)
+      MapRecipeData.list() must beEmpty
 
-  
+    }
+
+  }
+
   
 }
