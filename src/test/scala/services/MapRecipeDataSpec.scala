@@ -77,16 +77,14 @@ class MapRecipeDataSpec extends Specification {
     
     "remove and return the corresponding Recipe from the database given a valid ID" >> {
 
-     // val dummyRecipe = Recipe(66, "foo", Seq(Ingredient("bar", 0, "cups")), "do-nothing", 0)
-      //MapRecipeData.create(dummyRecipe)
-      //delete a recipe, ensure it returns Success(_)
-     // MapRecipeData.delete(66) must beSuccessfulTry
-      pending
+      val dummyRecipe = Recipe(66, "foo", Seq(Ingredient("bar", 0, "cups")), "do-nothing", 0)
+      MapRecipeData.create(dummyRecipe) must beSuccessfulTry
+      MapRecipeData.delete(66) must beSuccessfulTry
     }
     
     "throw an exception when given an ID that does not exist in the database" >> {
       // Ensure we can't delete non existing recipe (should throw an IllegalArgumentException)
-      MapRecipeData.delete(100) must beFailedTry.withThrowable[IllegalArgumentException]
+      MapRecipeData.delete(100) must beFailedTry.withThrowable[IllegalArgumentException]    
     }
   }
   

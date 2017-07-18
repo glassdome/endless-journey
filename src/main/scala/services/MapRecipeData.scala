@@ -53,8 +53,9 @@ object MapRecipeData extends RecipeData[Int] {
     if (notFound(id)) 
       Failure(new IllegalArgumentException(s"Recipe with ID ${id} not found."))
     else Success { 
+      val result = rs(id)
       rs -= id
-      rs(id) 
+      result
     }
   }
   
