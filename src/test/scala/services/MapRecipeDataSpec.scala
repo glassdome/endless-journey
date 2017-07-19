@@ -115,15 +115,20 @@ class MapRecipeDataSpec extends Specification {
     
     "return a list of all Recipes in the database" >> {
       //ensures we have a seq of all the items in MapRecipeData
-      val keys = for ((k,v) <- MapRecipeData.rs) yield k
-        println(keys)
+//      val keys = for ((k,v) <- MapRecipeData.rs) yield k
+//        println(keys)
+//
+//      val list = MapRecipeData.list()
+//      val ids = for ( i <- list) yield i.id
+//      println(ids)
+//      println("="*20)
 
-      val list = MapRecipeData.list()
-      val ids = for ( i <- list) yield i.id
-      println(ids)
-      println("="*20)
-
-      pending
+      val keys = MapRecipeData.rs.keys.toSeq
+      val ids = MapRecipeData.list.map(_.id)
+      
+      keys == ids must beTrue
+      
+      //pending
     }
     
     "return an empty list when the database is empty" >> {
