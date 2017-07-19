@@ -8,6 +8,7 @@ import org.specs2.specification.Scope
 
 import scala.None
 
+import scala.util.Try
 
 class MapRecipeDataSpec extends Specification {
   
@@ -133,7 +134,15 @@ class MapRecipeDataSpec extends Specification {
     
     "return an empty list when the database is empty" >> {
       //ensures we have an empty list if all items are deleted
-      for ((k,v) <- MapRecipeData.rs)  MapRecipeData.delete(k)
+      //for ((k,v) <- MapRecipeData.rs)  MapRecipeData.delete(k)
+      
+      // Map over recipes, cache delete result of each.
+      val deleted: Seq[Try[Recipe[Int]]] = (MapRecipeData.rs.map { case (k, v) => MapRecipeData.delete(k) }).toSeq
+      
+      // Ensure ALL deletes succeeded
+      deleted exists { _.isFailure } must beFalse
+      
+      // Now test the method
       MapRecipeData.list() must beEmpty
 
     }
