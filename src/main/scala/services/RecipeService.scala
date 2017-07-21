@@ -25,6 +25,7 @@ class RecipeService[A](db: RecipeData[A]) {
   def validateRecipe(r: Recipe[Int]): Try[Recipe[Int]] = Try {
     if (r.servings <= 0) throw new RuntimeException(s"Servings must be > 0. found: ${r.servings}")
     if (r.ingredients.isEmpty) throw new RuntimeException(s"Must supply at least one ingredient.")
+    if  (titleExists(r.title)) throw new RuntimeException(s"Title: '${r.title}' already exists.")
     r
   }
   
@@ -32,9 +33,10 @@ class RecipeService[A](db: RecipeData[A]) {
    * Determine if any Recipe in the database has the given title.
    */
   def titleExists(title: String): Boolean = {
-    db.list exists { r => normal(r.title) == normal(title) } 
+    db.list exists { r => normal(r.title) == normal(title)}
   }
-  
+
+
   private[services] def normal(s: String) = s.trim.toLowerCase
   
   private[services] def validMultiplier(in: Double): Boolean = {

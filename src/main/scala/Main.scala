@@ -31,5 +31,22 @@ object Main extends App {
   for( r <- recipes) println("Recipe with title 'rec1' " + r.instruction)
 
   for ( r <- (Recipes.findByIngredient(myRecipes, "Chicken"))) println(Recipes.formatRecipe(r))
-
+  
+  
+  import scala.collection.mutable.HashMap
+  
+  val rs: HashMap[Int, String] = new HashMap()
+  
+  rs += (1 -> "alpha")
+  rs += (2 -> "beta")
+  rs += (66 -> "delta")
+  
+  println(rs); println
+  
+  rs -= 66
+  
+  println(rs)
+  
 }
+
+
