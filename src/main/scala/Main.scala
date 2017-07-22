@@ -16,6 +16,7 @@ object Main extends App {
   val ing1 = Seq( i1, i2, i5)
   val ing2 = Seq( i3, i4, i5)
   val ing3 = Seq( i1,i3, i4, i5, i6)
+/*
 
   val rec1 = Recipe[Int](1, "rec1", ing1, "instructions1", 1)
   val rec2 = Recipe[Int](2, "rec2", ing2, "instructions2", 1)
@@ -33,6 +34,7 @@ object Main extends App {
   for ( r <- (Recipes.findByIngredient(myRecipes, "Chicken"))) println(Recipes.formatRecipe(r))
   
   
+*/
   import scala.collection.mutable.HashMap
   
   val rs: HashMap[Int, String] = new HashMap()

@@ -43,7 +43,7 @@ object Recipes {
 
       |[instruction]:
 
-       |  ${r.instruction}
+       |  ${r.instructions}
 
        |$sep
 

@@ -2,7 +2,7 @@ package services
 
 import models._
 import scala.collection.mutable.HashMap
-import scala.collection.mutable.{Map => MutableMap}
+import services._
 
 import scala.util.{Try, Success, Failure}
 
@@ -13,7 +13,7 @@ import scala.util.{Try, Success, Failure}
  * Note this class is suitable only for testing as all data is stored in-memory only.
  * Also note this class loads 3 example recipies on initialization.
  */
-object MapRecipeData extends RecipeData[Int] {
+object MapRecipeData extends RecipeData[Int] with RecipeHelper {
 
   // A Map acting as our Recipe[Int] data store
   private[services] val rs: HashMap[Int, Recipe[Int]] = new HashMap()
@@ -81,13 +81,16 @@ object MapRecipeData extends RecipeData[Int] {
    * This is a cheat for our little test scenario.  The code below will run once, as soon as the object is loaded, so
    * we'll always have these three Recipes in the database at startup.
    */
-  val r1 = Recipe(1, 
+
+  val r1 = newDummyRecipe(id =1,
+      author = "author1",
       title       = "Beans and Rice",
       ingredients = Seq(Ingredient("white rice", 1, "cup"), Ingredient("black beans", 15, "oz")),
-      instruction = "Boil the rice. Heat up the beans. Mix together and eat.",
+      instructions = "Boil the rice. Heat up the beans. Mix together and eat.",
       servings    = 4)
 
-  val r2 = Recipe(2, 
+  val r2 = newDummyRecipe(2,
+      author = "author2",
       title       = "Tofu and Vegetable Stir Fry",
       ingredients = Seq(
           Ingredient("firm tofu", 16, "oz"),
@@ -95,13 +98,14 @@ object MapRecipeData extends RecipeData[Int] {
           Ingredient("shitake mushrooms", 1, "lb"),
           Ingredient("white rice", 1, "cup"),
           Ingredient("soy sauce", 1, "tbsp")),
-      instruction = "Tofu and vegetables in a wok. rice in a pot. Eat it.",
+      instructions = "Tofu and vegetables in a wok. rice in a pot. Eat it.",
       servings    = 4)
   
-  val r3 = Recipe(3, 
+  val r3 = newDummyRecipe(3,
+      author = "author3",
       title       = "Basic Quinoa",
       ingredients = Seq(Ingredient("quinoa", 1, "cup"), Ingredient("water", 2, "cups")),
-      instruction = "Boil water, add quinoa. Turn heat to low and simmer for 15 minutes or until water has evaporated.",
+      instructions = "Boil water, add quinoa. Turn heat to low and simmer for 15 minutes or until water has evaporated.",
       servings    = 4)
   
   rs += (r1.id -> r1)

@@ -9,15 +9,16 @@ import org.specs2.specification.Scope
 import scala.None
 import scala.collection.mutable.HashMap
 import scala.util.Try
-class RecipeServiceSpec extends Specification{
+class RecipeServiceSpec extends Specification with RecipeHelper{
 
   sequential
 
 
-  val dummyRecipe = Recipe(10001, "dummy recipe 1 for RecipeService test",
-    Seq(Ingredient("bar", 1, "cups")), "do-nothing", 1)
-  val dummyRecipe2 = Recipe(10002, "Beans and Rice",
-    Seq(Ingredient("bar", 1, "cups")), "do-nothing", 1)
+  val dummyRecipe = newDummyRecipe(id = 10001, title = "dummy recipe 1 for RecipeService test",
+    ingredients = Seq(Ingredient("bar", 1, "cups")), instructions = "do-nothing", servings = 1)
+
+  val dummyRecipe2 = newDummyRecipe(id = 10002, title = "Beans and Rice",
+    ingredients = Seq(Ingredient("bar", 1, "cups")), instructions = "do-nothing", servings = 1)
 
   //populate RecipeService with recipes
   val recService = RecipeService(MapRecipeData)
