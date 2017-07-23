@@ -6,6 +6,7 @@ import services._
 
 import scala.util.{Try, Success, Failure}
 
+
 /**
  * A Recipe Database backed by a simple HashMap object.
  * 
@@ -13,7 +14,7 @@ import scala.util.{Try, Success, Failure}
  * Note this class is suitable only for testing as all data is stored in-memory only.
  * Also note this class loads 3 example recipies on initialization.
  */
-object MapRecipeData extends RecipeData[Int] with RecipeHelper {
+object MapRecipeData extends RecipeData[Int] {
 
   // A Map acting as our Recipe[Int] data store
   private[services] val rs: HashMap[Int, Recipe[Int]] = new HashMap()
@@ -29,25 +30,33 @@ object MapRecipeData extends RecipeData[Int] with RecipeHelper {
   }
   
   
-  def create(r: Recipe[Int]): Try[Recipe[Int]] = {
+  def create(r: Recipe[Int], user: String): Try[Recipe[Int]] = {
 
     // Error if given ID already exists - no duplicates allowed.
     if (rs.contains(r.id)) 
       Failure(new IllegalArgumentException(s"Recipe with ID ${r.id} already exists."))
-    else Success(concat(r))
+    else {
+      val timestamp = ActionAudit.now(user, "created")
+      Success(concat(r.copy(created = timestamp, modified = timestamp)))
+    }
   }
 
   
-  def update(r: Recipe[Int]): Try[Recipe[Int]] = {
+  def update(r: Recipe[Int], user: String): Try[Recipe[Int]] = {
     
     // Error if the given recipe doesn't exist (can't update nothing)
     if (notFound(r.id))
       Failure(new IllegalArgumentException(s"Recipe with ID ${r.id} not found."))
-    else Success(concat(r))
+    else {
+      /*
+       * TODO: Updated r.modified with the user and action "updated"
+       */
+      Success(concat(r))
+    }
   }
 
   
-  def delete(id: Int): Try[Recipe[Int]] = {
+  def delete(id: Int, user: String): Try[Recipe[Int]] = {
     
     // Error if the given recipe doesn't exist.
     if (notFound(id)) 
@@ -55,7 +64,7 @@ object MapRecipeData extends RecipeData[Int] with RecipeHelper {
     else Success { 
       val result = rs(id)
       rs -= id
-      result
+      result.copy(modified = ActionAudit.now(user, "deleted"))
     }
   }
   
@@ -81,16 +90,21 @@ object MapRecipeData extends RecipeData[Int] with RecipeHelper {
    * This is a cheat for our little test scenario.  The code below will run once, as soon as the object is loaded, so
    * we'll always have these three Recipes in the database at startup.
    */
-
-  val r1 = newDummyRecipe(id =1,
-      author = "author1",
-      title       = "Beans and Rice",
-      ingredients = Seq(Ingredient("white rice", 1, "cup"), Ingredient("black beans", 15, "oz")),
+  private val dummyUser = "noone@example.com"
+  
+  val r1 = Recipe(1, 
+      author       = "noone@example.com",
+      created      = ActionAudit.now(dummyUser, "created"),
+      modified     = ActionAudit.now(dummyUser, "created"),
+      title        = "Beans and Rice",
+      ingredients  = Seq(Ingredient("white rice", 1, "cup"), Ingredient("black beans", 15, "oz")),
       instructions = "Boil the rice. Heat up the beans. Mix together and eat.",
-      servings    = 4)
+      servings     = 4)
 
-  val r2 = newDummyRecipe(2,
-      author = "author2",
+  val r2 = Recipe(2, 
+      author       = "noone@example.com",
+      created      = ActionAudit.now(dummyUser, "created"),
+      modified     = ActionAudit.now(dummyUser, "created"),      
       title       = "Tofu and Vegetable Stir Fry",
       ingredients = Seq(
           Ingredient("firm tofu", 16, "oz"),
@@ -101,12 +115,14 @@ object MapRecipeData extends RecipeData[Int] with RecipeHelper {
       instructions = "Tofu and vegetables in a wok. rice in a pot. Eat it.",
       servings    = 4)
   
-  val r3 = newDummyRecipe(3,
-      author = "author3",
+  val r3 = Recipe(3,
+      author       = "noone@example.com",
+      created      = ActionAudit.now(dummyUser, "created"),
+      modified     = ActionAudit.now(dummyUser, "created"),      
       title       = "Basic Quinoa",
       ingredients = Seq(Ingredient("quinoa", 1, "cup"), Ingredient("water", 2, "cups")),
       instructions = "Boil water, add quinoa. Turn heat to low and simmer for 15 minutes or until water has evaporated.",
-      servings    = 4)
+      servings    = 4)  
   
   rs += (r1.id -> r1)
   rs += (r2.id -> r2)
