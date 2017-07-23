@@ -1,21 +1,5 @@
 package models
 
-//import com.github.nscala_time.time.Imports._
-
-case class ActionAudit(user: String, action: String, time: String ){
-  override def toString() = {
-    s"${user} - ${action} - ${time}"
-  }
-}
-/*
-case class Recipe[A](
-    id: A,
-    title: String, 
-    ingredients: Seq[Ingredient],
-    instruction: String, 
-    servings: Int)
-*/
-
 case class Recipe[A](
                       id: A,
                       author: String,
