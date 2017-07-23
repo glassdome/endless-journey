@@ -1,7 +1,7 @@
 package models
 
 case class Ingredient(
-    name: String, 
+    name: String,
+   //TODO:  prep: String,
     quantity: Double, 
     measure: String="")
-    

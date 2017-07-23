@@ -1,6 +1,5 @@
 package services
 
-
 import models._
 import org.specs2.mutable._
 import org.specs2.specification._
@@ -17,6 +16,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
   sequential
 
   private val dummyUser = "na@example.com"
+
   
   "constructor" should {
     /*
@@ -51,6 +51,15 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
       MapRecipeData.rs.size must_== (oldcount + 1)
     }
 
+    "have the created.time equal to the modified.time " >> {
+      val dummyRecipe =  newDummyRecipe(1001)
+      val updatedRec = MapRecipeData.create(dummyRecipe, dummyUser)
+
+      updatedRec must beSuccessfulTry
+      updatedRec.get.created.time === updatedRec.get.modified.time
+
+    }
+
     "fail when given a recipe with a duplicate ID" >> {
 
       val dummyRecipe = newDummyRecipe(id = 1, "foo",
@@ -62,7 +71,8 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
       // Ensure we can't replace or duplicate the item (should throw an IllegalArgumentException)
       MapRecipeData.create(dummyRecipe, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
     }
-  }
+
+  }//end Create should
 
 
 
@@ -71,34 +81,51 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
     "return the corresponding Recipe given an ID that exists in the database" >> {
       //ensure we have a recipe with ID = 1
       MapRecipeData.findById(1)  must_=== Some(MapRecipeData.rs(1))
-
     }
 
     "return None when given an ID that does not exist in the database" >> {
       //ensure we don't have an item with ID = 100 which doesn't exist
       MapRecipeData.findById(100)  must_=== None
-
     }
   }
 
   "delete" should {
 
     "remove and return the corresponding Recipe from the database given a valid ID" >> {
-
       val dummyRecipe = newDummyRecipe(id = 66, title = "new foo",
         ingredients =Seq(Ingredient("bar", 0, "cups")), instructions = "do-nothing", servings = 0)
       MapRecipeData.create(dummyRecipe, dummyUser) must beSuccessfulTry
       MapRecipeData.delete(66, dummyUser) must beSuccessfulTry
     }
 
+
+
     "throw an exception when given an ID that does not exist in the database" >> {
       // Ensure we can't delete non existing recipe (should throw an IllegalArgumentException)
       MapRecipeData.delete(1000, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
+    }
+
+    "replace modified ActionAudit's timestamp with the new timestamp and action with 'deleted'" >> {
+
+      val dummyRecipe = MapRecipeData.findById(2).get
+      val oldTimeStamp = dummyRecipe.modified.time
+      val oldUser = dummyRecipe.modified.user
+      val result =  MapRecipeData.delete(2, oldUser)
+
+      result must beSuccessfulTry
+
+      val delAction = result.get.modified.action
+      val delTimeStamp = result.get.modified.time
+
+      delAction === "deleted"
+      oldTimeStamp !== delTimeStamp
+
     }
   }
 
   "update" should {
 
+    //tests for a valid ID
     "replace the corresponding Recipe with the new representation given a valid ID" >> {
 
       val dummyRecipe = MapRecipeData.findById(1).get
@@ -111,7 +138,20 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
       val result = MapRecipeData.update(updatedRec, dummyUser)
       result must beSuccessfulTry
       result.get.ingredients.size === oldIngCount + 1
+    }
 
+    "replace the modified timestamp with the updated timestamp" >> {
+
+      val dummyRecipe = MapRecipeData.findById(1).get
+      val oldModifiedTime = dummyRecipe.modified.time
+      val oldUser = dummyRecipe.modified.user
+
+      val result =  MapRecipeData.update(dummyRecipe, oldUser)
+      result must beSuccessfulTry
+
+      val newModifiedTime = result.get.modified.time
+
+      oldModifiedTime !== newModifiedTime
     }
 
     "throw an exception when given and ID that does not exist in the database" >> {
@@ -119,6 +159,8 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
         ingredients = Seq(Ingredient("bar", 0, "cups")), instructions = "do-nothing", servings = 0)
       MapRecipeData.update(dummyRecipe, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
     }
+
+
   }
 
   "list" should {

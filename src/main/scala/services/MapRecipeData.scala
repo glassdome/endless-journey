@@ -34,24 +34,21 @@ object MapRecipeData extends RecipeData[Int] {
 
     // Error if given ID already exists - no duplicates allowed.
     if (rs.contains(r.id)) 
-      Failure(new IllegalArgumentException(s"Recipe with ID ${r.id} already exists."))
+      Failure(new IllegalArgumentException(s"Recipe with ID $r.id already exists."))
     else {
       val timestamp = ActionAudit.now(user, "created")
       Success(concat(r.copy(created = timestamp, modified = timestamp)))
     }
   }
 
-  
+
   def update(r: Recipe[Int], user: String): Try[Recipe[Int]] = {
     
     // Error if the given recipe doesn't exist (can't update nothing)
     if (notFound(r.id))
-      Failure(new IllegalArgumentException(s"Recipe with ID ${r.id} not found."))
+      Failure(new IllegalArgumentException(s"Recipe with ID $r.id not found."))
     else {
-      /*
-       * TODO: Updated r.modified with the user and action "updated"
-       */
-      Success(concat(r))
+      Success(r.copy(modified = ActionAudit.now(user, "updated")))
     }
   }
 
@@ -60,7 +57,7 @@ object MapRecipeData extends RecipeData[Int] {
     
     // Error if the given recipe doesn't exist.
     if (notFound(id)) 
-      Failure(new IllegalArgumentException(s"Recipe with ID ${id} not found."))
+      Failure(new IllegalArgumentException(s"Recipe with ID $id not found."))
     else Success { 
       val result = rs(id)
       rs -= id
