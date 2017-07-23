@@ -9,6 +9,8 @@ import org.specs2.specification.Scope
 import scala.None
 import scala.collection.mutable.HashMap
 import scala.util.Try
+import test.util.RecipeHelper
+
 class RecipeServiceSpec extends Specification with RecipeHelper{
 
   sequential

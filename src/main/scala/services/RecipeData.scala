@@ -30,7 +30,7 @@ trait RecipeData[A] {
    * @param r the new Recipe[A] to persist
    * @return the newly created Recipe[A]
    */
-  def create(r: Recipe[A]): Try[Recipe[A]]
+  def create(r: Recipe[A], user: String): Try[Recipe[A]]
   
   /**
    * Update an existing Recipe[A]
@@ -38,7 +38,7 @@ trait RecipeData[A] {
    * @param r the modified Recipe[A] to persist
    * @return the updated Recipe[A]
    */
-  def update(r: Recipe[A]): Try[Recipe[A]]
+  def update(r: Recipe[A], user: String): Try[Recipe[A]]
   
   /**
    * Delete a recipe from the database
@@ -46,6 +46,6 @@ trait RecipeData[A] {
    * @param id the ID of the Recipe[A] to delete
    * @return the recipe that was deleted
    */
-  def delete(id: A): Try[Recipe[A]]
+  def delete(id: A, user: String): Try[Recipe[A]]
 }
 

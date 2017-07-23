@@ -9,12 +9,15 @@ import org.specs2.specification.Scope
 import scala.None
 
 import scala.util.Try
+import test.util.RecipeHelper
 
 
 class MapRecipeDataSpec extends Specification with RecipeHelper {
 
   sequential
 
+  private val dummyUser = "na@example.com"
+  
   "constructor" should {
     /*
      * This will test our initialization code. Ensure the three 'seed' recipes load at startup.
@@ -42,7 +45,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
         ingredients = Seq(Ingredient("bar", 0, "cups")), instructions = "do-nothing", servings = 0)
 
       // Add new recipe, ensure it returns Success(_)
-      MapRecipeData.create(dummyRecipe) must beSuccessfulTry
+      MapRecipeData.create(dummyRecipe, dummyUser) must beSuccessfulTry
 
       // Ensure map.size increases by 1
       MapRecipeData.rs.size must_== (oldcount + 1)
@@ -57,7 +60,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
       MapRecipeData.rs.contains(1) must beTrue
 
       // Ensure we can't replace or duplicate the item (should throw an IllegalArgumentException)
-      MapRecipeData.create(dummyRecipe) must beFailedTry.withThrowable[IllegalArgumentException]
+      MapRecipeData.create(dummyRecipe, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
     }
   }
 
@@ -84,13 +87,13 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
 
       val dummyRecipe = newDummyRecipe(id = 66, title = "new foo",
         ingredients =Seq(Ingredient("bar", 0, "cups")), instructions = "do-nothing", servings = 0)
-      MapRecipeData.create(dummyRecipe) must beSuccessfulTry
-      MapRecipeData.delete(66) must beSuccessfulTry
+      MapRecipeData.create(dummyRecipe, dummyUser) must beSuccessfulTry
+      MapRecipeData.delete(66, dummyUser) must beSuccessfulTry
     }
 
     "throw an exception when given an ID that does not exist in the database" >> {
       // Ensure we can't delete non existing recipe (should throw an IllegalArgumentException)
-      MapRecipeData.delete(1000) must beFailedTry.withThrowable[IllegalArgumentException]
+      MapRecipeData.delete(1000, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
     }
   }
 
@@ -105,7 +108,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
 
       updatedRec.ingredients.size === oldIngCount + 1
 
-      val result = MapRecipeData.update(updatedRec)
+      val result = MapRecipeData.update(updatedRec, dummyUser)
       result must beSuccessfulTry
       result.get.ingredients.size === oldIngCount + 1
 
@@ -114,7 +117,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
     "throw an exception when given and ID that does not exist in the database" >> {
       val dummyRecipe = newDummyRecipe(id = 1000, title = "bad foo",
         ingredients = Seq(Ingredient("bar", 0, "cups")), instructions = "do-nothing", servings = 0)
-      MapRecipeData.update(dummyRecipe) must beFailedTry.withThrowable[IllegalArgumentException]
+      MapRecipeData.update(dummyRecipe, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
     }
   }
 
@@ -135,7 +138,8 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
       //ensures we have an empty list if all items are deleted
 
       // Map over recipes, cache delete result of each.
-      val deleted: Seq[Try[Recipe[Int]]] = (MapRecipeData.rs.map { case (k, v) => MapRecipeData.delete(k) }).toSeq
+      val deleted: Seq[Try[Recipe[Int]]] = (MapRecipeData.rs.map { 
+        case (k, v) => MapRecipeData.delete(k, dummyUser) }).toSeq
 
       // Ensure ALL deletes succeeded
       deleted exists { _.isFailure } must beFalse
