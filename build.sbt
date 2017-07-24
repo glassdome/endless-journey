@@ -4,7 +4,7 @@ version := "1.0"
 
 scalaVersion := "2.12.1"
 
-
+coverageEnabled := true
 
 //
 // This puts the name of the project into the sbt command prompt. Very useful when working with multiple projects
