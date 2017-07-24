@@ -17,10 +17,10 @@ class RecipeServiceSpec extends Specification with RecipeHelper{
 
 
   val dummyRecipe = newDummyRecipe(id = 10001, title = "dummy recipe 1 for RecipeService test",
-    ingredients = Seq(Ingredient("bar", 1, "cups")), instructions = "do-nothing", servings = 1)
+    ingredients = Seq(Ingredient("bar","chopped", 1, "cups")), instructions = "do-nothing", servings = 1)
 
   val dummyRecipe2 = newDummyRecipe(id = 10002, title = "Beans and Rice",
-    ingredients = Seq(Ingredient("bar", 1, "cups")), instructions = "do-nothing", servings = 1)
+    ingredients = Seq(Ingredient("bar","chopped", 1, "cups")), instructions = "do-nothing", servings = 1)
 
   //populate RecipeService with recipes
   val recService = RecipeService(MapRecipeData)
