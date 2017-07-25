@@ -94,7 +94,7 @@ object MapRecipeData extends RecipeData[Int] {
       created      = ActionAudit.now(dummyUser, "created"),
       modified     = ActionAudit.now(dummyUser, "created"),
       title        = "Beans and Rice",
-      ingredients  = Seq(Ingredient("white rice", 1, "cup", Some("boiled")), Ingredient("black beans", 15, "oz", Some("dry"))),
+      ingredients  = Seq(Ingredient("white rice", 1, Some("cup"), Some("boiled")), Ingredient("black beans", 15, Some("oz"), Some("dry"))),
       instructions = "Boil the rice. Heat up the beans. Mix together and eat.",
       servings     = 4)
 
@@ -104,11 +104,11 @@ object MapRecipeData extends RecipeData[Int] {
       modified     = ActionAudit.now(dummyUser, "created"),      
       title       = "Tofu and Vegetable Stir Fry",
       ingredients = Seq(
-          Ingredient("firm tofu", 16, "oz"),
-          Ingredient("red bell peppers", 2, "unit",Some("chopped")),
-          Ingredient("shitake mushrooms", 1, "lb"),
-          Ingredient("white rice", 1, "cup", Some("dry")),
-          Ingredient("soy sauce", 1, "tbsp")),
+          Ingredient("firm tofu", 16,Some("oz")),
+          Ingredient("red bell peppers", 2, Some("unit"),Some("chopped")),
+          Ingredient("shitake mushrooms", 1, Some("lb")),
+          Ingredient("white rice", 1, Some("cup"), Some("dry")),
+          Ingredient("soy sauce", 1, Some("tbsp"))),
       instructions = "Tofu and vegetables in a wok. rice in a pot. Eat it.",
       servings    = 4)
   
@@ -117,7 +117,7 @@ object MapRecipeData extends RecipeData[Int] {
       created      = ActionAudit.now(dummyUser, "created"),
       modified     = ActionAudit.now(dummyUser, "created"),      
       title       = "Basic Quinoa",
-      ingredients = Seq(Ingredient("quinoa", 1, "cup", Some("cooked")), Ingredient("water", 2, "cups")),
+      ingredients = Seq(Ingredient("quinoa", 1, Some("cup"), Some("cooked")), Ingredient("water", 2, Some("cups"))),
       instructions = "Boil water, add quinoa. Turn heat to low and simmer for 15 minutes or until water has evaporated.",
       servings    = 4)  
   

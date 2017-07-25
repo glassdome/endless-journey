@@ -42,7 +42,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
 
       //val dummyRecipe = newDummyRecipe(4)
       val dummyRecipe = newDummyRecipe(id= 4, title = "foo",
-        ingredients = Seq(Ingredient("bar", 0, "cups", Some("chopped"))), instructions = "do-nothing", servings = 0)
+        ingredients = Seq(Ingredient("bar", 0, Some("cups"), Some("chopped"))), instructions = "do-nothing", servings = 0)
 
       // Add new recipe, ensure it returns Success(_)
       MapRecipeData.create(dummyRecipe, dummyUser) must beSuccessfulTry
@@ -63,7 +63,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
     "fail when given a recipe with a duplicate ID" >> {
 
       val dummyRecipe = newDummyRecipe(id = 1, "foo",
-        ingredients = Seq(Ingredient("bar", 0, "cups",Some("melted") )), instructions = "do-nothing", servings = 0)
+        ingredients = Seq(Ingredient("bar", 0, Some("cups"),Some("melted") )), instructions = "do-nothing", servings = 0)
 
 
       // Ensure we have an item with ID == 1
@@ -94,7 +94,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
 
     "remove and return the corresponding Recipe from the database given a valid ID" >> {
       val dummyRecipe = newDummyRecipe(id = 66, title = "new foo",
-        ingredients =Seq(Ingredient("bar", 0, "cups")), instructions = "do-nothing", servings = 0)
+        ingredients =Seq(Ingredient("bar", 0, Some("cups"))), instructions = "do-nothing", servings = 0)
       MapRecipeData.create(dummyRecipe, dummyUser) must beSuccessfulTry
       MapRecipeData.delete(66, dummyUser) must beSuccessfulTry
     }
@@ -131,7 +131,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
 
       val dummyRecipe = MapRecipeData.findById(1).get
       val oldIngCount = dummyRecipe.ingredients.size
-      val newIngredients = dummyRecipe.ingredients :+ Ingredient("blah", 23, "tsp", Some("diced"))
+      val newIngredients = dummyRecipe.ingredients :+ Ingredient("blah", 23, Some("tsp"), Some("diced"))
       val updatedRec = dummyRecipe.copy(ingredients = newIngredients)
 
       updatedRec.ingredients.size === oldIngCount + 1
@@ -157,7 +157,7 @@ class MapRecipeDataSpec extends Specification with RecipeHelper {
 
     "throw an exception when given and ID that does not exist in the database" >> {
       val dummyRecipe = newDummyRecipe(id = 1000, title = "bad foo",
-        ingredients = Seq(Ingredient("bar",0, "cups")), instructions = "do-nothing", servings = 0)
+        ingredients = Seq(Ingredient("bar",0, Some("cups"))), instructions = "do-nothing", servings = 0)
       MapRecipeData.update(dummyRecipe, dummyUser) must beFailedTry.withThrowable[IllegalArgumentException]
     }
 
