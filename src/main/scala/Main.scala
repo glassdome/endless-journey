@@ -3,12 +3,12 @@ object Main extends App {
   import models._
   import RecipesOp.Recipes
   
-  val i1 =  Ingredient("Peppers","chopped",2)
-  val i2 =  Ingredient("Mushrooms","sliced" ,1, "cup")
-  val i3 =  Ingredient("Chicken", "diced",1, "cup")
-  val i4 =  Ingredient("Ground Basil","chopped", 2, "tsp")
-  val i5 =  Ingredient("Salt", "ground", 0.5,"tsp")
-  val i6 =  Ingredient("Tomatoes","sliced", 2, "can")
+  val i1 =  Ingredient("Peppers",2,"cup", Some("chopped"))
+  val i2 =  Ingredient("Mushrooms" ,1, "cup")
+  val i3 =  Ingredient("Chicken",1, "cup")
+  val i4 =  Ingredient("Ground Basil", 2, "tsp")
+  val i5 =  Ingredient("Salt", 0.5,"tsp")
+  val i6 =  Ingredient("Tomatoes", 2, "can", Some("canned, diced"))
 
   println( i1)
   println(i5)

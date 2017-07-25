@@ -41,7 +41,7 @@ trait RecipeHelper {
     * @param n the number of Ingredients to supply in the sequence
     */
   def newDummyIngredients(n: Int): Seq[Ingredient] = {
-    (1 to n) map { i => Ingredient(uuid.toString,"prep"+i, i, "tbsp") }
+    (1 to n) map { i => Ingredient(uuid.toString,i, "tbsp" , Some("prep" + i)) }
   }
 
 
