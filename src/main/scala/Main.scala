@@ -90,13 +90,13 @@ object Main extends App {
     if (goodUsers.contains(user)) 
       "you are a good user" 
     else 
-      throw new RuntimeException("AUTHENTICATE: fuck you...you are a bad user")
+      throw new RuntimeException("AUTHENTICATE: No...you are a bad user")
   }
 
   def authorize(user: String): Try[String] = Try {
     if (user != "bilbo@example.com") 
       "you are authorized"
-    else throw new RuntimeException("AUTHORIZE : fuck you, bilbo")
+    else throw new RuntimeException("AUTHORIZE : No, bilbo")
   }
 
   def getData(user: String): Try[String] = Try {
