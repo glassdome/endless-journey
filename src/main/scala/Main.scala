@@ -45,8 +45,143 @@ object Main extends App {
   
   rs -= 66
   
-  println(rs)
+
   
+  
+  val o1: Option[String] = Some("foo")
+  val o2: Option[String] = None
+  
+  
+  val word: String = o2 match {
+    case None => "123"
+    case Some(w) => w
+  }
+  
+  
+  
+  if (o1.isDefined) o1 else Some("N/A")
+  
+  val word3: String = o2 getOrElse "N/A"
+  
+
+  val word5 = o1.fold("N/A")(s => s)
+  
+  val word2 = Some(o1 getOrElse "N/A")
+  
+  val word6 = o1 orElse Some("N/A")
+
+  def wordReader(s: Option[String]) = ???
+
+  import scala.util.{ Try, Success, Failure }
+  import scala.util.{ Either, Left, Right }
+
+  
+  val goodUsers = Seq(
+      "frodo@example.com",
+      "sam@example.com",
+      "bilbo@example.com")
+
+  val badUsers = Seq(
+      "voldemort@example.com",
+      "sauron@example.com")  
+  
+  
+  def authenticate(user: String): Try[String] = Try {
+    if (goodUsers.contains(user)) 
+      "you are a good user" 
+    else 
+      throw new RuntimeException("AUTHENTICATE: No...you are a bad user")
+  }
+
+  def authorize(user: String): Try[String] = Try {
+    if (user != "bilbo@example.com") 
+      "you are authorized"
+    else throw new RuntimeException("AUTHORIZE : No, bilbo")
+  }
+
+  def getData(user: String): Try[String] = Try {
+    s"HERE IS YOUR DATA, $user"
+  }  
+  
+  
+  def rte(message: String) = throw new RuntimeException(message)
+
+  def login1(user: String): String = {
+    
+    authenticate(user) match {
+      case Failure(e) => rte("FORBIDDEN: " + e.getMessage)
+      case Success(d) => {
+        authorize(user) match {
+          case Failure(e) => rte("FORBIDDEN: " + e.getMessage)
+          case Success(d) => {
+            getData(user) match {
+              case Failure(e)    => rte("FORBIDDEN: " + e.getMessage)
+              case Success(data) => data
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  def login3(user: String): Try[String] = for {
+    _    <- authenticate(user)
+    _    <- authorize(user)
+    data <- getData(user)
+  } yield data
+
+  
+  println("-"*50)
+  println("PROCESS-1:\n" + login3("baduser@example.com"))
+  println("-"*50)
+  println("PROCESS-1:\n" + login3("bilbo@example.com"))
+  println("-"*50)
+  println("PROCESS-1:\n" + login3("sam@example.com"))
+  println("-"*50)
+  
+  def login2(user: String): String = {
+
+    authenticate(user) match {
+      case Failure(e) => rte("FORBIDDEN: " + e.getMessage)
+      case Success(_) => authorize(user) match {
+        case Failure(e) => rte("FORBIDDEN: " + e.getMessage)
+        case Success(_) => getData(user) match {
+          case Failure(e)    => rte("FORBIDDEN: " + e.getMessage)
+          case Success(data) => data
+        }
+      }
+    }
+  }  
+  
+ 
+  
+  
+  
+
+  
+  
+  case class NetworkClient(protocol: String, host: String, port: Option[Int] = None) {
+    
+    lazy val baseUrl = {
+      val portString = port.fold(""){ p => ":%d".format(p) }
+      
+      //"%s://%s%s".format(protocol, host, portString)
+      s"$protocol://${host}${portString}"
+    }
+
+  }
+  
+  
+
+
+  println
+  println("WORD : " + word)
+  println("WORD2 : " + word2)
+  println("WORD3 : " + word3)
+  
+  println("WORD5 : " + word5)
+  println("WORD6 : " + word6)
+  println
 }
 
 
