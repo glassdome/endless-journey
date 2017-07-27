@@ -1,6 +1,8 @@
-name := "RecipeApp"
+name := "recipe-sdk"
 
-version := "1.0"
+version := "0.1.0"
+
+organization := "io.glassdome"
 
 scalaVersion := "2.12.1"
 
@@ -13,8 +15,9 @@ shellPrompt in ThisBuild := { state => "\033[0;36m" + Project.extract(state).cur
 
 
 libraryDependencies ++= Seq(
-	"org.slf4j" 	 % "slf4j-api" 			% "1.7.10",
-	"ch.qos.logback" % "logback-classic" 	% "1.1.2",
-	"org.specs2" 	 % "specs2-core_2.12"   % "3.9.2" % "test"
+	"com.typesafe.play" % "play-json_2.12" 		% "2.6.2",
+	"org.slf4j" 	 	% "slf4j-api" 			% "1.7.10",
+	"ch.qos.logback" 	% "logback-classic" 	% "1.1.2",
+	"org.specs2" 	 	% "specs2-core_2.12"    % "3.9.2" 	% "test"
 )
 

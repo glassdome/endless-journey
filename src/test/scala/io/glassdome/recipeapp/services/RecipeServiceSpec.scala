@@ -1,7 +1,9 @@
 
-package services
+package io.glassdome.recipeapp.services
 
-import models._
+
+import io.glassdome.recipeapp.models._
+
 import org.specs2.mutable._
 import org.specs2.specification._
 import org.specs2.specification.Scope
