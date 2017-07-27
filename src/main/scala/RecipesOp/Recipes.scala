@@ -1,7 +1,7 @@
 package RecipesOp
 
 
-import models._
+import io.glassdome.recipeapp.models._
 
 object Recipes {
 

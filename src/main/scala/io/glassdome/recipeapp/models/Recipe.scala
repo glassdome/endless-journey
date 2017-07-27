@@ -1,4 +1,4 @@
-package models
+package io.glassdome.recipeapp.models
 
 case class Recipe[A](
     id: A,

@@ -1,6 +1,6 @@
-package services
+package io.glassdome.recipeapp.services
 
-import models._
+import io.glassdome.recipeapp.models._
 import scala.util.{Try, Success, Failure}
 
 

@@ -1,7 +1,9 @@
 object Main extends App {
 
-  import models._
+  import io.glassdome.recipeapp.models._
   import RecipesOp.Recipes
+  import io.glassdome.recipeapp.services._
+  
   
   val i1 =  Ingredient("Peppers",2)
   val i2 =  Ingredient("Mushrooms", 1, "cup")
@@ -46,6 +48,20 @@ object Main extends App {
   rs -= 66
   
   println(rs)
+  
+  
+  import play.api.libs.json._
+  
+  val r = MapRecipeData.findById(1)
+  println(r)
+  println("\nAS-JSON\n")
+  
+  
+  implicit lazy val ingredientFormat = Json.format[Ingredient]
+  implicit lazy val recipeFormat = Json.format[Recipe[Int]]
+  
+  
+  println(Json.prettyPrint(Json.toJson(r)))
   
 }
 
